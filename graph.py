@@ -102,17 +102,25 @@ def reader_node(state: ResearchState) -> dict:
     return {"scraped_content": "\n".join(scraped)}
 
 def writer_node(state: ResearchState) -> dict:
-    """Drafts the report based on RAG, search, and scraped content."""
+    """Drafts a highly detailed, dense research report (~2000 words)."""
+
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "You are an expert research writer. Write clear, structured and insightful reports."),
-        ("human", """Write a detailed research report based on the directive below.
+        ("system", 
+         "You are an expert research analyst and technical writer. "
+         "You produce dense, insight-rich, graduate-level research reports with deep explanations, "
+         "not summaries. Every point must be elaborated with reasoning, examples, and context."
+        ),
 
-Directive: {research_directive}
+        ("human", """
+Write a **highly detailed, deeply analytical research report (~1800–2000 words MAX)**.
 
-Previous Feedback (if any):
+Directive:
+{research_directive}
+
+Previous Feedback:
 {critic_feedback}
 
-RAG Context (from uploaded files):
+RAG Context:
 {rag_context}
 
 Search Results:
@@ -121,19 +129,81 @@ Search Results:
 Scraped Content:
 {scraped_content}
 
-This must be a highly detailed, comprehensive, deep-dive research report. Aim for at least 1500 words of dense, factual content. Do not write a surface-level summary. Go deep into the technical, historical, or practical details.
+========================
+STRICT WRITING RULES
+========================
+1. TOTAL LENGTH: 1800–2000 words (DO NOT EXCEED).
+2. DEPTH OVER BREADTH:
+   - Do NOT list short bullet points.
+   - EVERY bullet must be expanded into **3–6 sentences minimum**.
+3. NO SHALLOW CONTENT:
+   - Avoid generic statements.
+   - Include reasoning, mechanisms, cause-effect, and implications.
+4. USE STRUCTURED PARAGRAPHS:
+   - Each subsection should contain **multiple dense paragraphs**.
+5. TECHNICAL RIGOR:
+   - Include frameworks, real-world examples, systems, or mechanisms where relevant.
+6. CRITICAL THINKING:
+   - Add analysis, trade-offs, contradictions, or limitations.
+7. REMOVE FILLER:
+   - No vague phrases like "important", "various", "many factors".
+   - Be precise and data-oriented where possible.
 
-Structure the incredibly detailed report exactly as follows:
+========================
+MANDATORY STRUCTURE
+========================
+
 # Title
-## Executive Summary
-## In-Depth Analysis & Key Findings (Provide extensive details, multiple subsections, bullet points, and data if available)
-## Architectural or Conceptual Visuals
-Create a markdown `mermaid` block (e.g. ```mermaid\n graph TD;\n ... ```) if it helps visualize concepts.
-## Practical Implications / Future Outlook
-## Comprehensive Conclusion
-## Sources (list all used URLs)
 
-Ensure you address any "Previous Feedback" if provided. Every section must be extensively detailed, highly professional, and factual.
+## Executive Summary (200–250 words)
+- Provide a concise but information-dense overview of the entire report.
+- Include key arguments, findings, and implications.
+
+## In-Depth Analysis & Key Findings (1000–1200 words)
+- Break into multiple **clearly labeled subsections**.
+- Each subsection must:
+  - Start with a strong conceptual explanation.
+  - Follow with detailed elaboration.
+  - Include real-world examples, systems, or evidence where possible.
+- If using bullet points:
+  - Each bullet MUST be expanded into a mini-paragraph (3–6 sentences).
+- Include:
+  - Historical / technical background (if relevant)
+  - Mechanisms / processes
+  - Comparative analysis
+  - Risks / limitations
+
+## Architectural or Conceptual Visuals
+- Provide a **mermaid diagram** if helpful.
+- Ensure it reflects actual structure (not decorative).
+
+## Practical Implications / Future Outlook (300–400 words)
+- Discuss:
+  - Real-world impact
+  - Strategic implications
+  - Future developments
+  - Risks and opportunities
+- Must be analytical, not speculative fluff.
+
+## Comprehensive Conclusion (200–250 words)
+- Synthesize insights (NOT repeat summary).
+- Highlight key takeaways + deeper meaning.
+
+## Sources
+- List all URLs used.
+
+========================
+QUALITY ENFORCEMENT
+========================
+- Convert ALL short points into detailed explanations.
+- Avoid compressed bullets like in PDFs.
+- Each idea must feel like a **fully explained concept**, not a note.
+
+========================
+FINAL INSTRUCTION
+========================
+Produce a **dense, professional, research-grade document close to 2000 words**.
+Do NOT produce a short or surface-level report.
 """)
     ])
     
