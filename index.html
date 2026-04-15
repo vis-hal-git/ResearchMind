@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResearchMind — Multi-Agent Research Assistant</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=JetBrains+Mono:wght@300;400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══════════════════════ LANDING PAGE ═══════════════════════ -->
+  <div id="page-landing" class="page active">
+
+    <!-- NAV -->
+    <nav class="nav">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <span class="logo-mark">RM</span>
+          <span class="logo-text">ResearchMind</span>
+        </a>
+        <div class="nav-links">
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#workflow" class="nav-link">Workflow</a>
+          <button class="btn btn-primary btn-sm" id="nav-cta">Launch Research</button>
+        </div>
+        <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <canvas id="star-canvas" aria-hidden="true"></canvas>
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Multi-Agent AI Research System
+        </div>
+        <h1 class="hero-headline">
+          The Research Engine<br/>
+          <em>Built for Depth</em>
+        </h1>
+        <p class="hero-sub">
+          ResearchMind orchestrates autonomous agents to search, curate, verify, and synthesize knowledge — transforming your query into a publication-ready report in minutes.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-lg" id="hero-cta">
+            <span>Begin Research</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <a href="#workflow" class="btn btn-ghost btn-lg">See How It Works</a>
+        </div>
+        <div class="hero-meta">
+          <span class="meta-item"><span class="meta-num">4</span> Autonomous Agents</span>
+          <span class="meta-div">·</span>
+          <span class="meta-item"><span class="meta-num">RAG</span> Document Context</span>
+          <span class="meta-div">·</span>
+          <span class="meta-item"><span class="meta-num">PDF</span> Export Ready</span>
+        </div>
+      </div>
+      <div class="hero-orb" aria-hidden="true"></div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features-section" id="features">
+      <div class="section-inner">
+        <div class="section-label">Capabilities</div>
+        <h2 class="section-title">Research at a different scale</h2>
+        <div class="features-grid">
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M8 11h6M11 8v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <h3 class="feature-title">Deep Web Search</h3>
+            <p class="feature-body">Autonomous agents scan the live web, academic repositories, and curated databases to surface the most relevant sources for your topic.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8L14 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <h3 class="feature-title">RAG Document Context</h3>
+            <p class="feature-body">Upload your own PDFs and source documents. The retrieval system grounds generation in your private knowledge base alongside live search.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3s9 4.03 9 9z" stroke="currentColor" stroke-width="1.5"/></svg>
+            </div>
+            <h3 class="feature-title">Human-in-the-Loop</h3>
+            <p class="feature-body">Review and approve candidate sources before synthesis. Stay in control of what feeds your final report — no black-box automation.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="feature-title">Critic Loop</h3>
+            <p class="feature-body">A dedicated critic agent reviews drafts for factual accuracy, logical coherence, and coverage gaps — iterating until quality thresholds are met.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="feature-title">Structured Reports</h3>
+            <p class="feature-body">Outputs are fully structured with headings, citations, tables, and source lists — ready for review or immediate publication.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="feature-title">Export Anywhere</h3>
+            <p class="feature-body">Download your report as Markdown or rendered PDF. Share, archive, or feed results back into future research pipelines.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- WORKFLOW -->
+    <section class="workflow-section" id="workflow">
+      <div class="section-inner">
+        <div class="section-label">Process</div>
+        <h2 class="section-title">From query to report</h2>
+        <div class="workflow-steps">
+
+          <div class="workflow-step">
+            <div class="step-number">01</div>
+            <div class="step-content">
+              <h3>Define Your Topic</h3>
+              <p>Enter your research question and upload supporting PDF documents for private context. The system understands nuanced, multi-part queries.</p>
+            </div>
+          </div>
+
+          <div class="workflow-connector" aria-hidden="true"></div>
+
+          <div class="workflow-step">
+            <div class="step-number">02</div>
+            <div class="step-content">
+              <h3>Deep Search</h3>
+              <p>Agents fan out across the web and your documents, returning ranked candidate sources with summaries, credibility signals, and relevance scores.</p>
+            </div>
+          </div>
+
+          <div class="workflow-connector" aria-hidden="true"></div>
+
+          <div class="workflow-step">
+            <div class="step-number">03</div>
+            <div class="step-content">
+              <h3>Human Approval</h3>
+              <p>Review the candidate source list. Approve or reject each source before synthesis begins. Your judgment shapes the final report.</p>
+            </div>
+          </div>
+
+          <div class="workflow-connector" aria-hidden="true"></div>
+
+          <div class="workflow-step">
+            <div class="step-number">04</div>
+            <div class="step-content">
+              <h3>Scrape, Write & Critic</h3>
+              <p>Approved sources are fully scraped. A writer agent drafts the report; a critic agent iterates until quality standards are satisfied.</p>
+            </div>
+          </div>
+
+          <div class="workflow-connector" aria-hidden="true"></div>
+
+          <div class="workflow-step">
+            <div class="step-number">05</div>
+            <div class="step-content">
+              <h3>Export & Use</h3>
+              <p>Download your structured report in Markdown or PDF. Annotated, cited, and ready for immediate use.</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="workflow-cta">
+          <button class="btn btn-primary btn-lg" id="workflow-cta">Start Your First Research</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <span class="logo-mark">RM</span>
+          <span class="logo-text">ResearchMind</span>
+        </div>
+        <p class="footer-copy">Multi-agent research intelligence. Built for thinkers.</p>
+      </div>
+    </footer>
+
+  </div><!-- /page-landing -->
+
+
+  <!-- ═══════════════════════ WORKSPACE PAGE ═══════════════════════ -->
+  <div id="page-workspace" class="page">
+
+    <!-- WORKSPACE NAV -->
+    <nav class="nav nav-workspace">
+      <div class="nav-inner">
+        <button class="nav-back" id="back-to-home">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Home
+        </button>
+        <a href="#" class="nav-logo">
+          <span class="logo-mark">RM</span>
+          <span class="logo-text">ResearchMind</span>
+        </a>
+        <div class="ws-status" id="ws-status">
+          <span class="ws-status-dot"></span>
+          <span class="ws-status-label">Ready</span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="workspace">
+
+      <!-- LEFT: INPUT PANEL -->
+      <aside class="panel panel-input" id="panel-input">
+        <div class="panel-header">
+          <h2 class="panel-title">Research Configuration</h2>
+          <p class="panel-sub">Define your topic and provide source documents</p>
+        </div>
+
+        <!-- TOPIC INPUT -->
+        <div class="field-group">
+          <label class="field-label" for="topic-input">Research Topic</label>
+          <textarea
+            id="topic-input"
+            class="field-textarea"
+            placeholder="e.g. What are the long-term geopolitical consequences of de-dollarization in emerging markets post-2022?"
+            rows="4"
+            maxlength="2000"
+          ></textarea>
+          <div class="field-meta">
+            <span class="field-hint">Be specific — detailed queries yield richer results</span>
+            <span class="char-count" id="char-count">0 / 2000</span>
+          </div>
+        </div>
+
+        <!-- PDF UPLOAD -->
+        <div class="field-group">
+          <label class="field-label">Source Documents <span class="field-optional">(optional)</span></label>
+          <div class="upload-zone" id="upload-zone" role="button" tabindex="0" aria-label="Upload PDF files">
+            <div class="upload-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4v14M7 11l7-7 7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20v2a2 2 0 002 2h16a2 2 0 002-2v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <p class="upload-primary">Drop PDFs here or <span class="upload-link">browse</span></p>
+            <p class="upload-secondary">PDF files up to 50MB each · Multiple files supported</p>
+            <input type="file" id="file-input" accept=".pdf" multiple class="visually-hidden" />
+          </div>
+          <div class="file-list" id="file-list"></div>
+        </div>
+
+        <!-- SEARCH SETTINGS -->
+        <div class="field-group">
+          <label class="field-label">Search Depth</label>
+          <div class="segmented-control" role="group">
+            <button class="seg-btn active" data-value="standard">Standard</button>
+            <button class="seg-btn" data-value="deep">Deep</button>
+            <button class="seg-btn" data-value="exhaustive">Exhaustive</button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Max Sources</label>
+          <div class="range-wrapper">
+            <input type="range" id="max-sources" min="5" max="30" value="12" class="range-input" />
+            <span class="range-value" id="range-value">12</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full" id="start-research">
+          <span class="btn-label">Begin Research</span>
+          <div class="btn-loader hidden"></div>
+        </button>
+
+      </aside>
+
+      <!-- CENTER: PIPELINE + RESULTS -->
+      <div class="workspace-center">
+
+        <!-- PIPELINE STATUS -->
+        <div class="pipeline-panel" id="pipeline-panel">
+          <div class="pipeline-header">
+            <span class="section-label">Pipeline</span>
+            <div class="pipeline-progress-bar">
+              <div class="pipeline-progress-fill" id="pipeline-fill" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="pipeline-steps">
+
+            <div class="pipeline-step" id="step-search" data-step="search">
+              <div class="step-indicator">
+                <div class="step-circle">
+                  <span class="step-icon-idle">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M10 10l2.5 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  </span>
+                  <span class="step-icon-active hidden">
+                    <svg class="spin" width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 24" stroke-linecap="round"/></svg>
+                  </span>
+                  <span class="step-icon-done hidden">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-info">
+                <span class="step-name">Deep Search</span>
+                <span class="step-status-text">Awaiting start</span>
+              </div>
+            </div>
+
+            <div class="pipeline-step" id="step-approval" data-step="approval">
+              <div class="step-indicator">
+                <div class="step-circle">
+                  <span class="step-icon-idle">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 5l-4 4-2-2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/></svg>
+                  </span>
+                  <span class="step-icon-active hidden"><svg class="spin" width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 24" stroke-linecap="round"/></svg></span>
+                  <span class="step-icon-done hidden"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-info">
+                <span class="step-name">Human Approval</span>
+                <span class="step-status-text">Pending search</span>
+              </div>
+            </div>
+
+            <div class="pipeline-step" id="step-scrape" data-step="scrape">
+              <div class="step-indicator">
+                <div class="step-circle">
+                  <span class="step-icon-idle">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h7M2 10h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  </span>
+                  <span class="step-icon-active hidden"><svg class="spin" width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 24" stroke-linecap="round"/></svg></span>
+                  <span class="step-icon-done hidden"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-info">
+                <span class="step-name">Scrape &amp; Write</span>
+                <span class="step-status-text">Pending approval</span>
+              </div>
+            </div>
+
+            <div class="pipeline-step" id="step-critic" data-step="critic">
+              <div class="step-indicator">
+                <div class="step-circle">
+                  <span class="step-icon-idle">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v2M7 10v2M2 7h2M10 7h2M3.5 3.5l1.5 1.5M9 9l1.5 1.5M3.5 10.5L5 9M9 5l1.5-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  </span>
+                  <span class="step-icon-active hidden"><svg class="spin" width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 24" stroke-linecap="round"/></svg></span>
+                  <span class="step-icon-done hidden"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+              </div>
+              <div class="step-info">
+                <span class="step-name">Critic Review</span>
+                <span class="step-status-text">Not started</span>
+              </div>
+            </div>
+
+          </div><!-- /pipeline-steps -->
+        </div><!-- /pipeline-panel -->
+
+        <!-- TOAST MESSAGES -->
+        <div class="toast-area" id="toast-area" aria-live="polite"></div>
+
+        <!-- IDLE PLACEHOLDER -->
+        <div class="idle-placeholder" id="idle-placeholder">
+          <div class="idle-orb" aria-hidden="true"></div>
+          <h3>Awaiting Research Query</h3>
+          <p>Configure your topic and documents on the left, then click <em>Begin Research</em> to start the pipeline.</p>
+        </div>
+
+        <!-- SEARCH RESULTS -->
+        <div class="results-panel hidden" id="results-panel">
+          <div class="panel-header">
+            <span class="section-label">Candidate Sources</span>
+            <div class="results-actions">
+              <button class="btn btn-ghost btn-sm" id="select-all-btn">Select All</button>
+              <button class="btn btn-ghost btn-sm" id="deselect-all-btn">Deselect All</button>
+            </div>
+          </div>
+          <div class="sources-list" id="sources-list"></div>
+          <div class="approval-footer">
+            <p class="approval-hint"><span id="approved-count">0</span> sources selected for synthesis</p>
+            <button class="btn btn-primary" id="approve-btn">Approve &amp; Begin Synthesis</button>
+          </div>
+        </div>
+
+        <!-- REPORT VIEWER -->
+        <div class="report-panel hidden" id="report-panel">
+          <div class="report-toolbar">
+            <div class="report-meta">
+              <span class="section-label">Final Report</span>
+              <span class="report-word-count" id="report-word-count"></span>
+            </div>
+            <div class="report-actions">
+              <button class="btn btn-ghost btn-sm" id="copy-report-btn">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M2 9V2h7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                Copy
+              </button>
+              <button class="btn btn-ghost btn-sm" id="download-md-btn">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v8M4 7l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Markdown
+              </button>
+              <button class="btn btn-primary btn-sm" id="download-pdf-btn">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v8M4 7l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Export PDF
+              </button>
+            </div>
+          </div>
+          <article class="report-body" id="report-body"></article>
+          <div class="sources-section" id="report-sources-section"></div>
+        </div>
+
+      </div><!-- /workspace-center -->
+
+    </main>
+  </div><!-- /page-workspace -->
+
+
+  <!-- ═══════════════════════ MOBILE NAV MENU ═══════════════════════ -->
+  <div class="mobile-menu hidden" id="mobile-menu">
+    <a href="#features" class="mobile-link">Features</a>
+    <a href="#workflow" class="mobile-link">Workflow</a>
+    <button class="btn btn-primary btn-full" id="mobile-cta">Launch Research</button>
+  </div>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>
