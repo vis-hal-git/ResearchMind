@@ -34,4 +34,3 @@ def scrape_url(url: str) -> str:
         return soup.get_text(separator=" ", strip=True)[:10000]
     except Exception as e:
         return f"Could not scrape URL: {str(e)}"
-

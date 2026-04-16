@@ -399,6 +399,11 @@ function initControls() {
   textarea?.addEventListener('input', () => {
     if (counter) counter.textContent = `${textarea.value.length} / 2000`;
   });
+
+  // Sync initial state with UI
+  if (range) state.maxSources = parseInt(range.value);
+  const activeDepth = document.querySelector('.seg-btn.active');
+  if (activeDepth) state.searchDepth = activeDepth.dataset.value;
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -425,6 +430,13 @@ async function startResearch() {
 
   resetPipelineUI();
   hideAll();
+  
+  // Clear previous results
+  state.sources = [];
+  state.approvedSources = [];
+  state.report = null;
+  state.threadId = null;
+
   setWsStatus('active', 'Uploading context…');
   setPipelineStep('search', 'active', 'Uploading PDFs and starting search…');
   setProgress(12);
@@ -438,13 +450,18 @@ async function startResearch() {
     setWsStatus('active', 'Searching…');
     setProgress(28);
 
+    console.log(`%c🚀 STARTING RESEARCH`, 'color: #ff9d00; font-weight: bold; font-size: 14px;');
+    console.log(`Topic: ${topic}`);
+    console.log(`Max Sources: ${state.maxSources}`);
+    console.log(`Search Depth: ${state.searchDepth}`);
+
     const response = await apiRequest('/api/research/start', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
         topic,
         search_depth: state.searchDepth,
-        max_sources: state.maxSources 
+        max_sources: parseInt(state.maxSources) 
       }),
     });
 

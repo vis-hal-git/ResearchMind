@@ -60,7 +60,7 @@ def home() -> FileResponse:
 class StartResearchRequest(BaseModel):
     topic: str
     search_depth: str = "standard"
-    max_sources: int = 12
+    max_sources: int = 10
 
 
 class ContinueResearchRequest(BaseModel):
@@ -152,6 +152,12 @@ def start_research(payload: StartResearchRequest) -> dict[str, Any]:
     if not topic:
         raise HTTPException(status_code=400, detail="Topic is required.")
 
+    print("\n" + "="*50)
+    print(f"🔥 INCOMING REQUEST: {topic}")
+    print(f"📦 MAX SOURCES: {payload.max_sources} (Type: {type(payload.max_sources)})")
+    print(f"🔍 SEARCH DEPTH: {payload.search_depth}")
+    print("="*50 + "\n")
+
     thread_id = str(uuid.uuid4())
     graph = build_graph_runtime()
     config = {"configurable": {"thread_id": thread_id}}
@@ -160,7 +166,7 @@ def start_research(payload: StartResearchRequest) -> dict[str, Any]:
         for _ in graph.stream({
             "topic": topic,
             "search_depth": payload.search_depth,
-            "max_sources": payload.max_sources
+            "max_sources": int(payload.max_sources)
         }, config):
             pass
     except Exception as exc:
