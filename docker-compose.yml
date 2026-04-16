@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  # ResearchMind Main Application (FastAPI + Custom HTML UI)
+  research-mind:
+    build: .
+    container_name: research-mind
+    env_file: .env
+    ports:
+      - "8000:8000"
+    restart: always
+
+# Note: This setup uses your existing MongoDB Atlas cluster for persistence.

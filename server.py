@@ -24,7 +24,22 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent
 DB_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 
+
 app = FastAPI(title="ResearchMind API")
+
+def get_mongo_client():
+    # Only establish connection once per session
+    try:
+        client = MongoClient(DB_URI, serverSelectionTimeoutMS=5000)
+        # Force a call to check if connection is really established
+        client.admin.command('ping')
+        print("✅ Connected to MongoDB successfully")
+        return client
+    except Exception as e:
+        print(f"❌ Failed to connect to MongoDB: {e}")
+        return None
+
+client = get_mongo_client()
 
 app.add_middleware(
     CORSMiddleware,
@@ -44,6 +59,8 @@ def home() -> FileResponse:
 
 class StartResearchRequest(BaseModel):
     topic: str
+    search_depth: str = "standard"
+    max_sources: int = 12
 
 
 class ContinueResearchRequest(BaseModel):
@@ -140,7 +157,11 @@ def start_research(payload: StartResearchRequest) -> dict[str, Any]:
     config = {"configurable": {"thread_id": thread_id}}
 
     try:
-        for _ in graph.stream({"topic": topic}, config):
+        for _ in graph.stream({
+            "topic": topic,
+            "search_depth": payload.search_depth,
+            "max_sources": payload.max_sources
+        }, config):
             pass
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Research start failed: {exc}") from exc
@@ -190,4 +211,4 @@ def continue_research(payload: ContinueResearchRequest) -> dict[str, Any]:
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("server:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=True)

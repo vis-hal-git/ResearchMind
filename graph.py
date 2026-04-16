@@ -13,6 +13,8 @@ writer_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.5) # Using mini to pr
 
 class ResearchState(TypedDict):
     topic: str
+    search_depth: str
+    max_sources: int
     research_directive: str
     rag_context: str
     search_results: str
@@ -51,16 +53,18 @@ def enhance_topic_node(state: ResearchState) -> dict:
 def search_node(state: ResearchState) -> dict:
     """Performs RAG query and Web search, extracting candidate URLs."""
     topic = state['topic']
-    
+    search_depth = state.get('search_depth', 'standard')
+    max_sources = state.get('max_sources', 12)
+
     # 1. RAG query
     rag_ctx = query_documents(topic, k=3)
     
     # 2. Web search using Tavily. 
-    # We call the tool function directly.
-    # web_search returns a string of formatted results.
-    # We will also use TavilyClient directly to easily get raw URLs.
+    # Map UI depth to Tavily search_depth
+    tavily_depth = "advanced" if search_depth in ["deep", "exhaustive"] else "basic"
+    
     from tools import tavily
-    tavily_results = tavily.search(query=topic, max_results=5)
+    tavily_results = tavily.search(query=topic, search_depth=tavily_depth, max_results=max_sources)
     
     search_text_out = []
     urls = []

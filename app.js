@@ -441,7 +441,11 @@ async function startResearch() {
     const response = await apiRequest('/api/research/start', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ topic }),
+      body: JSON.stringify({ 
+        topic,
+        search_depth: state.searchDepth,
+        max_sources: state.maxSources 
+      }),
     });
 
     state.threadId = response.thread_id;
