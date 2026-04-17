@@ -912,6 +912,130 @@ function initAnchorScroll() {
 }
 
 // ══════════════════════════════════════════════════════════════
+// HISTORY MODAL LOGIC
+// ══════════════════════════════════════════════════════════════
+function initHistory() {
+  const openBtn = document.getElementById('open-history-btn');
+  const closeBtn = document.getElementById('close-history-btn');
+  const modal = document.getElementById('history-modal');
+  const list = document.getElementById('history-list');
+
+  if (!openBtn || !modal) return;
+
+  openBtn.addEventListener('click', () => {
+    modal.classList.remove('hidden');
+    loadHistoryData(list);
+  });
+
+  closeBtn.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+
+  // Keep modal open when clicking inside panel
+  modal.querySelector('.history-panel').addEventListener('click', e => e.stopPropagation());
+  
+  // Close on outside click
+  modal.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+}
+
+async function loadHistoryData(listEl) {
+  listEl.innerHTML = `
+    <div class="history-loading">
+      <svg class="spin" width="24" height="24" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 24" stroke-linecap="round"/></svg>
+      <p>Loading history...</p>
+    </div>
+  `;
+  try {
+    const data = await apiRequest('/api/history');
+    const items = data.history || [];
+    
+    if (items.length === 0) {
+      listEl.innerHTML = `
+        <div class="history-empty">
+          <p>No past researches found.</p>
+        </div>
+      `;
+      return;
+    }
+
+    listEl.innerHTML = items.map(item => {
+      const date = new Date(item.created_at).toLocaleString(undefined, {
+        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
+      const statusClass = item.status === 'Completed' ? 'completed' : 'in-progress';
+      
+      return `
+        <div class="history-item" data-id="${item.thread_id}" data-status="${item.status}">
+          <div class="history-item-top">
+            <span class="history-topic">${escHtml(item.topic)}</span>
+            <span class="history-status ${statusClass}">${escHtml(item.status)}</span>
+          </div>
+          <div class="history-meta">
+            <span class="history-date">${date}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Attach click listeners to load report
+    listEl.querySelectorAll('.history-item').forEach(el => {
+      el.addEventListener('click', async () => {
+        if (el.dataset.status !== 'Completed') {
+          showToast('This research is not completed yet.', 'info');
+          return;
+        }
+        await loadPastReport(el.dataset.id);
+        document.getElementById('history-modal').classList.add('hidden');
+      });
+    });
+
+  } catch (err) {
+    listEl.innerHTML = `
+      <div class="history-empty">
+        <p>Failed to load history.</p>
+      </div>
+    `;
+    showToast('Failed to load history.', 'error');
+  }
+}
+
+async function loadPastReport(threadId) {
+  showToast('Loading past report...', 'info');
+  try {
+    const data = await apiRequest(`/api/history/${threadId}`);
+    
+    resetPipelineUI();
+    hideAll();
+    
+    // Set up state
+    state.threadId = data.thread_id;
+    state.report = data.draft_report;
+    
+    // Fill the inputs visually just to feel complete
+    const topicInput = document.getElementById('topic-input');
+    if (topicInput) topicInput.value = data.topic || '';
+    
+    setPipelineStep('search', 'done');
+    setPipelineStep('approval', 'done');
+    setPipelineStep('scrape', 'done');
+    setPipelineStep('critic', 'done');
+    setProgress(100);
+    setWsStatus('done', 'Complete');
+    
+    state.pipeline.current = 'done';
+    
+    // Empty sources as we don't store them yet
+    state.approvedSources = [];
+    renderReport();
+    showToast('Report loaded.', 'success');
+  } catch (err) {
+    showToast('Failed to load report.', 'error');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════════
 function init() {
@@ -928,6 +1052,7 @@ function init() {
   initReportActions();
   initScrollAnimations();
   initAnchorScroll();
+  initHistory();
 }
 
 document.addEventListener('DOMContentLoaded', init);

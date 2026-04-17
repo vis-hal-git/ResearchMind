@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 import os
 import uuid
 from pathlib import Path
@@ -159,6 +160,16 @@ def start_research(payload: StartResearchRequest) -> dict[str, Any]:
     print("="*50 + "\n")
 
     thread_id = str(uuid.uuid4())
+    
+    db = get_client()["research_mind"]
+    db["history"].insert_one({
+        "thread_id": thread_id,
+        "topic": topic,
+        "status": "In Progress",
+        "created_at": datetime.datetime.now(datetime.timezone.utc),
+        "draft_report": ""
+    })
+
     graph = build_graph_runtime()
     config = {"configurable": {"thread_id": thread_id}}
 
@@ -205,13 +216,44 @@ def continue_research(payload: ContinueResearchRequest) -> dict[str, Any]:
     state = graph.get_state(config)
     values = state.values if state else {}
 
+    draft_report = values.get("draft_report", "No report generated.")
+    
+    db = get_client()["research_mind"]
+    db["history"].update_one(
+        {"thread_id": payload.thread_id},
+        {"$set": {
+            "status": "Completed",
+            "draft_report": draft_report
+        }}
+    )
+
     return {
         "thread_id": payload.thread_id,
-        "draft_report": values.get("draft_report", "No report generated."),
+        "draft_report": draft_report,
         "critic_score": values.get("critic_score", 0),
         "critic_feedback": values.get("critic_feedback", ""),
         "revision_count": values.get("revision_count", 0),
     }
+
+@app.get("/api/history")
+def get_history() -> dict[str, Any]:
+    db = get_client()["research_mind"]
+    cursor = db["history"].find({}, {"_id": 0}).sort("created_at", -1)
+    history_list = list(cursor)
+    for item in history_list:
+        if "created_at" in item and item["created_at"]:
+            item["created_at"] = item["created_at"].isoformat()
+    return {"history": history_list}
+
+@app.get("/api/history/{thread_id}")
+def get_history_item(thread_id: str) -> dict[str, Any]:
+    db = get_client()["research_mind"]
+    item = db["history"].find_one({"thread_id": thread_id}, {"_id": 0})
+    if not item:
+        raise HTTPException(status_code=404, detail="History not found")
+    if "created_at" in item and item["created_at"]:
+        item["created_at"] = item["created_at"].isoformat()
+    return item
 
 
 if __name__ == "__main__":
