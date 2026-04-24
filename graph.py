@@ -123,40 +123,49 @@ def search_node(state: ResearchState) -> dict:
     print(f"   ✅ Batch 1 (original query): got {len(all_results)} unique results")
     
     # --- Additional batches if we still need more ---
-    if len(all_results) < max_sources:
+    if len(all_results) < max_sources or search_depth == "exhaustive":
         remaining = max_sources - len(all_results)
-        num_extra_queries = (remaining // TAVILY_MAX_PER_CALL) + (1 if remaining % TAVILY_MAX_PER_CALL else 0)
-        # Cap extra batches to avoid excessive API calls
-        num_extra_queries = min(num_extra_queries, 4)
         
-        variations = _generate_query_variations(topic, num_extra_queries)
-        print(f"   🔄 Generating {len(variations)} query variations for {remaining} more results…")
-        
-        for i, query_var in enumerate(variations):
-            if len(all_results) >= max_sources:
-                break
+        # If exhaustive, we force more query variations to get a wider pool to choose from
+        if search_depth == "exhaustive":
+            num_extra_queries = max(3, (remaining // TAVILY_MAX_PER_CALL) + 1)
+            cap = 6
+        else:
+            num_extra_queries = (remaining // TAVILY_MAX_PER_CALL) + (1 if remaining % TAVILY_MAX_PER_CALL else 0)
+            cap = 4
             
-            batch_size = min(max_sources - len(all_results), TAVILY_MAX_PER_CALL)
-            try:
-                batch_results = tavily_client.search(
-                    query=query_var, search_depth=tavily_depth, max_results=batch_size
-                )
-                batch_new = 0
-                for r in batch_results.get('results', []):
-                    url = r['url']
-                    if url not in seen_urls:
-                        seen_urls.add(url)
-                        all_results.append({
-                            "title": r['title'],
-                            "url": url,
-                            "snippet": r['content'][:300]
-                        })
-                        batch_new += 1
-                        if len(all_results) >= max_sources:
-                            break
-                print(f"   ✅ Batch {i+2} ('{query_var[:50]}…'): +{batch_new} new (total: {len(all_results)})")
-            except Exception as e:
-                print(f"   ⚠️ Batch {i+2} failed: {e}")
+        # Cap extra batches to avoid excessive API calls
+        num_extra_queries = min(num_extra_queries, cap)
+        
+        if num_extra_queries > 0:
+            variations = _generate_query_variations(topic, num_extra_queries)
+            print(f"   🔄 Generating {len(variations)} query variations for deeper coverage…")
+            
+            for i, query_var in enumerate(variations):
+                if len(all_results) >= max_sources:
+                    break
+                
+                batch_size = min(max_sources - len(all_results), TAVILY_MAX_PER_CALL)
+                try:
+                    batch_results = tavily_client.search(
+                        query=query_var, search_depth=tavily_depth, max_results=batch_size
+                    )
+                    batch_new = 0
+                    for r in batch_results.get('results', []):
+                        url = r['url']
+                        if url not in seen_urls:
+                            seen_urls.add(url)
+                            all_results.append({
+                                "title": r['title'],
+                                "url": url,
+                                "snippet": r['content'][:300]
+                            })
+                            batch_new += 1
+                            if len(all_results) >= max_sources:
+                                break
+                    print(f"   ✅ Batch {i+2} ('{query_var[:50]}…'): +{batch_new} new (total: {len(all_results)})")
+                except Exception as e:
+                    print(f"   ⚠️ Batch {i+2} failed: {e}")
     
     # Trim to exact max_sources
     all_results = all_results[:max_sources]
